@@ -20,3 +20,4 @@ This project uses the github API.
 6. Spinner when loading data
 7. pagination
 8. buttons in cells with modals and sidebars
+9. URL reflects the state of pagination and UI clicks
