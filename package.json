@@ -1,6 +1,7 @@
 {
-  "name": "v2-mobx",
+  "name": "rv-rich-table",
   "version": "0.1.0",
+  "homepage":"https://redcarpetup.github.io/rv-rich-table/",
   "private": true,
   "dependencies": {
     "axios": "^0.16.2",
