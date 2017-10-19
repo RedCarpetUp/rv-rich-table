@@ -1,5 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
+**Please dont fork** - create a pull request instead. Its good to have a single place with a lot of cool ways of how to use react-virtualized (as a spreadsheet), instead
+of having people hunt around.
 
 ## How to run
 
