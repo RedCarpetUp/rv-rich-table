@@ -7,6 +7,7 @@ import ReactPaginate from 'react-paginate';
 import { Button, Header, Image, Modal, Form, 
   Checkbox, Sidebar, Segment, Menu, Icon } from 'semantic-ui-react';
 import { parseClip, parseRow } from '../../utils/parsing';
+import queryString from 'query-string';
 
 class TableApp extends Component {
 
@@ -144,6 +145,8 @@ class TableApp extends Component {
 
   handlHeaderClick = (columnIndex,e) => {
     const { appState, history, match } = this.props;
+    const qs = window.location.search;
+    const parsed = queryString.parse(qs);
 
     if(this.state[`head-${columnIndex}`] == 'true') {
       // sort up
@@ -152,8 +155,12 @@ class TableApp extends Component {
         sortBy: 'followers',
         order: 'asc'
       })
-      history.push(`/profiles/${this.state.page}/followers/asc`)
-      appState.getTableList({type: 'sort', page:this.state.page , sortVal: this.state.columns[columnIndex], orderVal:'asc'});
+      history.push(`/profiles/${this.state.page}/followers/asc${qs}`)
+      appState.getTableList({type: 'sort', page:this.state.page , 
+        sortVal: this.state.columns[columnIndex], 
+        orderVal:'asc',
+        qs: parsed
+      });
     } else {
       // sort down
       for (var i = 6; i >= 0; i--) {
@@ -166,8 +173,12 @@ class TableApp extends Component {
         sortBy: 'followers',
         order: 'desc'
       })
-      history.push(`/profiles/${this.state.page}/followers/desc`)
-      appState.getTableList({type: 'sort', page:this.state.page , sortVal: this.state.columns[columnIndex], orderVal:'desc'});
+      history.push(`/profiles/${this.state.page}/followers/desc${qs}`)
+      appState.getTableList({type: 'sort', page:this.state.page , 
+        sortVal: this.state.columns[columnIndex], 
+        orderVal:'desc',
+        qs: parsed
+      });
     }
     
   }
@@ -526,17 +537,19 @@ class TableApp extends Component {
   handlePageClick = e => {
     const { appState, history, match } = this.props;
     const page = (isNaN(e.selected)) ? 0 : e.selected;
+    const qs = window.location.search;
+    const parsed = queryString.parse(qs);
     if (this.state.sortBy == ''){
       if (match.params.sort == 'followers'){
-        history.push(`/profiles/${page + 1}/${match.params.sort}/${match.params.order}`)
-        appState.getTableList({page: page + 1, type: 'sort', orderVal:match.params.order}); 
+        history.push(`/profiles/${page + 1}/${match.params.sort}/${match.params.order}${qs}`)
+        appState.getTableList({page: page + 1, type: 'sort', orderVal:match.params.order, qs: parsed}); 
       } else {
-        history.push(`/profiles/${page + 1}`)
-        appState.getTableList({page: page + 1}); 
+        history.push(`/profiles/${page + 1}${qs}`)
+        appState.getTableList({page: page + 1, qs: parsed}); 
       }
     } else {
-      history.push(`/profiles/${page + 1}/${this.state.sortBy}/${this.state.order}`)
-      appState.getTableList({page: page + 1, type: 'sort', orderVal:this.state.order}); 
+      history.push(`/profiles/${page + 1}/${this.state.sortBy}/${this.state.order}${qs}`)
+      appState.getTableList({page: page + 1, type: 'sort', orderVal:this.state.order, qs: parsed}); 
     }
     this.setState({page: page + 1})
 

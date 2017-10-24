@@ -7,6 +7,7 @@ class AppState {
       count: 1,
       tableList: [],
       isOdd: computed(() => this.count % 2 === 1),
+      pageRange: 30,
       column: {
         avatar_url: 'ID',
         login: 'NAME',
@@ -51,6 +52,13 @@ class AppState {
     const self = this;
     self.tableList = [];
     self.page = filter.page;
+    let querystring = '';
+    const qs = filter.qs;
+    const name = qs.name || self.query;
+    const repo = qs.repo || '';
+    const repoqs = repo ? `repos:${repo}` : '';
+    querystring = `${name}+${repoqs}`;
+    console.log(name)
     if (filter.type !== '') {
       switch (filter.type) {
         case 'name':
@@ -70,14 +78,14 @@ class AppState {
 
     axios({
       method:'get',
-      url: `https://api.github.com/search/users?q=${self.query}&page=${self.page}&sort=${self.sort}&order=${self.order}`,
+      url: `https://api.github.com/search/users?q=${querystring}&page=${self.page}&sort=${self.sort}&order=${self.order}`,
     })
     .then(function(response) {
       const arr = response.data.items;
       //self.tableList = arr
       //arr.splice(0,0, self.column)
       self.tableList = arr;
-      self.pageCount = response.data.total_count;
+      self.pageCount = Math.abs(response.data.total_count/self.pageRange);
     });
   }
 

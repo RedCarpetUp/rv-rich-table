@@ -56,7 +56,7 @@ class Profile extends Component {
         <div className="ui celled grid">
           <div className="row" style={{height:'500px'}}>
             <div className="three wide column">
-              <SideMenu appState={appState}/>
+              <SideMenu history={history} appState={appState}/>
             </div>
             <div className="thirteen wide column" style={{padding:'0'}}>
              <TableApp history={history} match={match} appState={appState} onShowDetailClick={this.handleShowDetail} />

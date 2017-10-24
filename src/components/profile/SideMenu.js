@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Select from 'react-virtualized-select'
 import createFilterOptions from 'react-select-fast-filter-options';
-import { Dropdown, Icon, Input, Menu } from 'semantic-ui-react'
+import { Dropdown, Icon, Input, Menu } from 'semantic-ui-react';
+import queryString from 'query-string';
 
 import 'react-select/dist/react-select.css'
 import 'react-virtualized/styles.css'
@@ -13,6 +14,7 @@ class SideMenu extends Component {
 
   state = {
     selectValue: '',
+    dataParse: {},
     options: [
       { label: "> 10 Repos", value: 10 },
       { label: "> 50 Repos", value: 50 },
@@ -35,6 +37,15 @@ class SideMenu extends Component {
     ]
   }
 
+  componentDidMount(){
+    const parsed = queryString.parse(window.location.search);
+    console.log(window.location.search)
+    console.log(parsed)
+    this.setState({
+      search: parsed.name
+    })
+  }
+
   handleSearchName = e => {
     this.setState({
       search: e.target.value
@@ -42,18 +53,39 @@ class SideMenu extends Component {
   }
 
   handleKeyPress = e => {
-    const {appState} = this.props;
+    const { appState, history } = this.props;
+    let parsed = this.state.dataParse;
+    parsed.name = this.state.search;
+    const stringified = queryString.stringify(parsed);
     if (e.key === 'Enter') {
-      appState.getTableList({type: 'name', value: this.state.search});
+      this.setState({
+        dataParse: parsed
+      })
+      appState.getTableList({type: 'name', value: this.state.search, qs:parsed});
+      history.push(`/profiles/1?${stringified}`)
     }
   }
 
   handleChangeSelect = (selectValue) => {
-    const {appState} = this.props;
-    this.setState({ 
-      selectValue 
-    })
-    appState.getTableList({type: 'repo', value: selectValue.value});
+    const { appState, history } = this.props;
+    console.log(selectValue)
+    let parsed = this.state.dataParse;
+    if (selectValue == null) {
+      parsed.repo = this.state.options[0].value;
+      this.setState({ 
+        selectValue: this.state.options[0],
+        dataParse: parsed 
+      })
+      appState.getTableList({type: 'repo', value: this.state.options[0].value, qs: parsed});
+    } else {
+      this.setState({ 
+        selectValue 
+      })
+      parsed.repo = selectValue.value;
+      appState.getTableList({type: 'repo', value: selectValue.value, qs: parsed});
+    }
+    const stringified = queryString.stringify(parsed);
+    history.push(`/profiles/1?${stringified}`)   
   }
 
   handleChangeSelect2 = (selectValue2) => {
@@ -106,22 +138,22 @@ class SideMenu extends Component {
               placeholder="Repository"
             />
           </Menu.Item>
-          <Menu.Item>
+         {/* <Menu.Item>
             <Select
               options={this.state.options2}
               onChange={this.handleChangeSelect2}
               value={this.state.selectValue2}
               placeholder="Followers"
             />
-          </Menu.Item>
+          </Menu.Item>*/}
 
-        <Dropdown item text='More'>
+       {/* <Dropdown item text='More'>
           <Dropdown.Menu>
             <Dropdown.Item icon='edit' text='Edit Profile' />
             <Dropdown.Item icon='globe' text='Choose Language' />
             <Dropdown.Item icon='settings' text='Account Settings' />
           </Dropdown.Menu>
-        </Dropdown>
+        </Dropdown>>*/}
         </div>
     );
   }
