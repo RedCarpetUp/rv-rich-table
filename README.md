@@ -24,3 +24,4 @@ This project uses the github API.
 8. buttons in cells with modals and sidebars
 9. URL reflects the state of pagination and UI clicks
 10. one of the columns is sortable (and fetches data from API when it is sorted)
+11. filters and search on the left side. filters and search will change the url and will work with sorting and pagination
