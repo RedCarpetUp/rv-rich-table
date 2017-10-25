@@ -32,7 +32,7 @@ class TableApp extends Component {
     sortBy: '',
     order: '',
     page: 0,
-    columnWidths: [50, 140, 140, 140, 320, 180, 200],
+    columnWidths: [50, 140, 100, 150, 320, 170, 230],
     columns : [ "select", "id", "avatar_url", "login", "followers_url", "task", "action" ],
     columnName: [ " ", "Id", "Avatar", "Name", "Followers", "Task", "Action"]
   }
@@ -370,7 +370,7 @@ class TableApp extends Component {
             }
             {columnName == 'Id' &&
               <div onCopy={this.handleCopyCell.bind(this, rowIndex, columnIndex)} className={hgbg}>
-                {!tableList[rowIndex]['dropdownRow'] && !tableList[rowIndex]['blankColumn'] &&
+                {!tableList[rowIndex]['dropdownRow'] && !tableList[rowIndex]['blankColumn'] && typeof tableList[rowIndex] === 'object' &&
                   <div style={{textAlign:'left'}}
                   className="cell-div2">
                   {!rowClicked &&
@@ -455,7 +455,7 @@ class TableApp extends Component {
             }
             {columnName == 'Task' &&
               <div className={'cell-div2 ' + hgbg}>
-              {!tableList[rowIndex]['dropdownRow'] &&
+              {!tableList[rowIndex]['dropdownRow'] && typeof tableList[rowIndex] === 'object' &&
                 <Modal trigger={<Button className="create-app-btn">
                   Create Application
                 </Button>}>
@@ -480,7 +480,7 @@ class TableApp extends Component {
               }
               </div>
             }
-            {columnName == 'Action' &&
+            {columnName == 'Action' && typeof tableList[rowIndex] === 'object' &&
               <div className={'cell-div2 ' + hgbg}>
               {!tableList[rowIndex]['dropdownRow'] &&
               <div>

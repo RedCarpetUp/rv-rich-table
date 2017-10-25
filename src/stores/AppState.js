@@ -56,20 +56,22 @@ class AppState {
     const qs = filter.qs;
     const name = qs.name || self.query;
     const repo = qs.repo || '';
+    const lang = qs.lang || '';
     const repoqs = repo ? `repos:${repo}` : '';
-    querystring = `${name}+${repoqs}`;
+    const langqs = lang ? `language:${lang}` : ''
+    querystring = `${name}+${repoqs}+${langqs}`;
     console.log(name)
     if (filter.type !== '') {
       switch (filter.type) {
-        case 'name':
-          self.query = filter.value
-          break;
-        case 'repo':
-          self.query = `repos:${filter.value}`
-          break;
-        case 'followers':
-          self.query = `followers:${filter.value}`
-          break;
+        // case 'name':
+        //   self.query = filter.value
+        //   break;
+        // case 'repo':
+        //   self.query = `repos:${filter.value}`
+        //   break;
+        // case 'followers':
+        //   self.query = `followers:${filter.value}`
+        //   break;
         case 'sort':
           self.sort = `followers`;
           self.order = filter.orderVal;
@@ -82,9 +84,14 @@ class AppState {
     })
     .then(function(response) {
       const arr = response.data.items;
+      if(arr.length === 0){
+        self.tableList = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+      } else {
+        self.tableList = arr;
+      }
       //self.tableList = arr
       //arr.splice(0,0, self.column)
-      self.tableList = arr;
+      
       self.pageCount = Math.abs(response.data.total_count/self.pageRange);
     });
   }

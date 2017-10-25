@@ -3,11 +3,7 @@ import Select from 'react-virtualized-select'
 import createFilterOptions from 'react-select-fast-filter-options';
 import { Dropdown, Icon, Input, Menu } from 'semantic-ui-react';
 import queryString from 'query-string';
-
-import 'react-select/dist/react-select.css'
-import 'react-virtualized/styles.css'
-import 'react-virtualized-select/styles.css'
-
+//import VirtualizedSelect from 'react-virtualized-select';
 import { downloadCSV } from '../../utils/parsing';
 
 class SideMenu extends Component {
@@ -15,6 +11,12 @@ class SideMenu extends Component {
   state = {
     selectValue: '',
     dataParse: {},
+    optionsLanguage: [
+      { label: "Javascript", value: "javascript" },
+      { label: "Ruby", value: "ruby" },
+      { label: "Python", value: "python" }
+      // And so on...
+    ],
     options: [
       { label: "> 10 Repos", value: 10 },
       { label: "> 50 Repos", value: 50 },
@@ -61,7 +63,7 @@ class SideMenu extends Component {
       this.setState({
         dataParse: parsed
       })
-      appState.getTableList({type: 'name', value: this.state.search, qs:parsed});
+      appState.getTableList({qs:parsed});
       history.push(`/profiles/1?${stringified}`)
     }
   }
@@ -71,29 +73,45 @@ class SideMenu extends Component {
     console.log(selectValue)
     let parsed = this.state.dataParse;
     if (selectValue == null) {
-      parsed.repo = this.state.options[0].value;
+      parsed.repo = '';
       this.setState({ 
-        selectValue: this.state.options[0],
+        selectValue: {},
         dataParse: parsed 
       })
-      appState.getTableList({type: 'repo', value: this.state.options[0].value, qs: parsed});
+      appState.getTableList({qs: parsed});
     } else {
       this.setState({ 
         selectValue 
       })
       parsed.repo = selectValue.value;
-      appState.getTableList({type: 'repo', value: selectValue.value, qs: parsed});
+      appState.getTableList({qs: parsed});
     }
     const stringified = queryString.stringify(parsed);
     history.push(`/profiles/1?${stringified}`)   
   }
 
-  handleChangeSelect2 = (selectValue2) => {
-    const {appState} = this.props;
-    this.setState({ 
-      selectValue2 
+  // handleChangeSelect2 = (selectValue2) => {
+  //   const {appState} = this.props;
+  //   this.setState({ 
+  //     selectValue2 
+  //   })
+  //   appState.getTableList({type: 'followers', value: selectValue2.value});
+  // }
+
+  handleChangeLang = (langVal) => {
+    const { appState, history } = this.props;
+    let arr = []
+    let parsed = this.state.dataParse;
+    langVal.map((item) => {
+      arr.push(item.value)
     })
-    appState.getTableList({type: 'followers', value: selectValue2.value});
+    this.setState({ 
+      langVal 
+    })
+    parsed.lang = arr;
+    const stringified = queryString.stringify(parsed);
+    history.push(`/profiles/1?${stringified}`)
+    appState.getTableList({qs: parsed});
   }
 
   handleExportCSV = e => {
@@ -136,6 +154,15 @@ class SideMenu extends Component {
               onChange={this.handleChangeSelect}
               value={this.state.selectValue}
               placeholder="Repository"
+            />
+          </Menu.Item>
+          <Menu.Item>
+            <Select
+              options={this.state.optionsLanguage}
+              onChange={this.handleChangeLang}
+              value={this.state.langVal}
+              multi={true}
+              placeholder="Language"
             />
           </Menu.Item>
          {/* <Menu.Item>
