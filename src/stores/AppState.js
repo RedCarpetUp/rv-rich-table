@@ -57,9 +57,9 @@ class AppState {
     const name = qs.name || self.query;
     const repo = qs.repo || '';
     const lang = qs.lang || '';
-    const repoqs = repo ? `repos:${repo}` : '';
-    const langqs = lang ? `language:${lang}` : ''
-    querystring = `${name}+${repoqs}+${langqs}`;
+    const repoqs = (repo.length != 0) ? `+repos:${repo}` : '';
+    const langqs = (lang.length != 0) ? `+language:${lang}` : ''
+    querystring = `${name}${repoqs}${langqs}`;
     console.log(name)
     if (filter.type !== '') {
       switch (filter.type) {

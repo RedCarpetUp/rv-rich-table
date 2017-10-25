@@ -10,6 +10,7 @@ class SideMenu extends Component {
 
   state = {
     selectValue: '',
+    langVal: '',
     dataParse: {},
     optionsLanguage: [
       { label: "Javascript", value: "javascript" },
@@ -41,16 +42,29 @@ class SideMenu extends Component {
 
   componentDidMount(){
     const parsed = queryString.parse(window.location.search);
-    console.log(window.location.search)
+    //console.log(window.location.search)
+    let sVal = {};
+    let lVal = '';
     console.log(parsed)
+    if (parsed.repo != '') {
+      const idx = this.state.options.findIndex((item) => {
+        return item.value == parsed.repo
+      })
+      console.log(idx)
+      sVal = this.state.options[idx]
+    }
+    
     this.setState({
-      search: parsed.name
+      dataParse: parsed,
+      search: parsed.name,
+      selectValue: sVal,
+      langVal: parsed.lang
     })
   }
 
   handleSearchName = e => {
     this.setState({
-      search: e.target.value
+      search: e.target.value,
     })
   }
 
@@ -73,19 +87,18 @@ class SideMenu extends Component {
     console.log(selectValue)
     let parsed = this.state.dataParse;
     if (selectValue == null) {
-      parsed.repo = '';
+      parsed.repo = []
       this.setState({ 
-        selectValue: {},
+        selectValue,
         dataParse: parsed 
       })
-      appState.getTableList({qs: parsed});
     } else {
       this.setState({ 
         selectValue 
       })
       parsed.repo = selectValue.value;
-      appState.getTableList({qs: parsed});
     }
+    appState.getTableList({qs: parsed});
     const stringified = queryString.stringify(parsed);
     history.push(`/profiles/1?${stringified}`)   
   }
@@ -108,6 +121,7 @@ class SideMenu extends Component {
     this.setState({ 
       langVal 
     })
+    console.log(arr)
     parsed.lang = arr;
     const stringified = queryString.stringify(parsed);
     history.push(`/profiles/1?${stringified}`)
