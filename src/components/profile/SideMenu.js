@@ -12,6 +12,7 @@ class SideMenu extends Component {
     selectValue: '',
     langVal: '',
     dataParse: {},
+    search: '',
     optionsLanguage: [
       { label: "Javascript", value: "javascript" },
       { label: "Ruby", value: "ruby" },
@@ -66,6 +67,19 @@ class SideMenu extends Component {
     this.setState({
       search: e.target.value,
     })
+  }
+
+  handleDeleteSearch = e => {
+    const { appState, history } = this.props;
+    let parsed = this.state.dataParse;
+    parsed.name = [];
+    this.setState({
+      search: '',
+      dataParse: parsed
+    })
+    const stringified = queryString.stringify(parsed);
+    appState.getTableList({qs:parsed});
+    history.push(`/profiles/1?${stringified}`)
   }
 
   handleKeyPress = e => {
@@ -143,7 +157,7 @@ class SideMenu extends Component {
 
   render() {
     const { activeItem } = this.state
-
+    console.log(typeof this.state.search)
     const {appState} = this.props;
     return (
       <div className="ui vertical menu">
@@ -161,6 +175,17 @@ class SideMenu extends Component {
           <Menu.Item>
             <Input placeholder='Search name...' onChange={this.handleSearchName} 
             value={this.state.search} onKeyPress={this.handleKeyPress} />
+            {typeof this.state.search !== 'undefined' && this.state.search != '' &&
+            <span 
+            onClick={this.handleDeleteSearch}
+            style={{
+              position:'absolute',
+              top:'24px',
+              right:'25px',
+              cursor:'pointer',
+              fontSize:'12px',
+              color:'#777'}} className="Select-clear">&#10005;</span>
+            }
           </Menu.Item>
           <Menu.Item>
             <Select
