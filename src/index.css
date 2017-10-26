@@ -3,6 +3,26 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+@media only screen and (max-width: 720px) {
+    .ui.stackable.celled.grid>.row>.table-react {
+        padding: 0 !important;
+        margin-top: 20px;
+    }
+    .table-cont{
+      width: 720px;
+      overflow: scroll;
+    }
+}
+@media only screen and (max-width: 480px) {
+    .ui.stackable.celled.grid>.row>.table-react {
+        padding: 0 !important;
+        margin-top: 20px;
+    }
+    .table-cont{
+      width: 480px;
+      overflow: scroll;
+    }
+}
 .HeaderGrid{
   overflow: hidden !important;
 }

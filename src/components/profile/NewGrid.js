@@ -561,7 +561,7 @@ class TableApp extends Component {
     const { isClickable, mode, scrollToColumn, scrollToRow, columns  } = this.state;
     const tableList = appState.tableList;
     return (
-      <div>
+      <div className="table-cont">
         <ArrowKeyStepper
           columnCount={columns.length}
           key={isClickable}

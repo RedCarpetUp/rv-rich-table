@@ -53,16 +53,16 @@ class Profile extends Component {
             <h2>Recent Profile List</h2>
           </div>
         </h2>
-        <div className="ui celled grid">
+        <div className="ui celled two column stackable grid">
           <div className="row" style={{height:'500px'}}>
             <div className="three wide column">
               <SideMenu history={history} appState={appState}/>
             </div>
-            <div className="thirteen wide column" style={{padding:'0'}}>
+            <div className="thirteen wide column table-react" style={{padding:'0'}}>
              <TableApp history={history} match={match} appState={appState} onShowDetailClick={this.handleShowDetail} />
             </div>
           </div>
-      </div>
+        </div>
           <Sidebar
             as={Menu}
             animation='overlay'
