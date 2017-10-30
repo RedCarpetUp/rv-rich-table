@@ -43,7 +43,7 @@ class TableApp extends Component {
     const orderBy = match.params.order || 'asc';
     if(sortBy === 'followers') {
       this.handleSortData(3, orderBy)
-    }
+    }     
   }
 
   componentWillUnmount() {
@@ -335,10 +335,10 @@ class TableApp extends Component {
     
 
     return (
-      <div>
+      <div key={key}>
           <div
             className={className}
-            key={key}
+            
             // onFocus={this.handleClickCell.bind(this, rowIndex, columnIndex)}
             // onBlur={this.handleBlurCell.bind(this, rowIndex, columnIndex)}
             // tabIndex="-1"

@@ -11,7 +11,7 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"></link>
-    <link rel="stylesheet" href="/styles/offline.css"></link>
+
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -27,27 +27,14 @@
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
+    <h1>OFFLINE</h1>
     <div id="root"></div>
-    <script src="/offline.min.js"></script>
-    <script type="text/javascript">
-      Offline.options = {checks: {xhr: {url: 'https://api.github.com/search/code?q=addClass+in:file+language:js+repo:jquery/jquery'}}};
-      // setInterval(() => {
-      //   console.log(Offline.state);
-      // if(window.navigator.onLine){
-      //   console.log(Offline.state);
-      //  } else {
-      //   Offline.state = 'down';
-      //   console.log('offline');
-      //  }
-      // },2000)
-    </script>
-<!--     <script src="/upup.min.js"></script>
+    <script src="/upup.min.js"></script>
     <script>
       UpUp.start({
         'content-url': 'offline.html' // show this page to offline users
       });
-    </script> -->
-  
+    </script>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

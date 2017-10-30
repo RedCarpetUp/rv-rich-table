@@ -46,18 +46,18 @@ class SideMenu extends Component {
     //console.log(window.location.search)
     let sVal = {};
     let lVal = '';
-    console.log(parsed)
+    // console.log(parsed)
     if (parsed.repo != '') {
       const idx = this.state.options.findIndex((item) => {
         return item.value == parsed.repo
       })
-      console.log(idx)
+      // console.log(idx)
       sVal = this.state.options[idx]
     }
     
     this.setState({
       dataParse: parsed,
-      search: parsed.name,
+      search: parsed.name || '',
       selectValue: sVal,
       langVal: parsed.lang
     })
@@ -98,7 +98,7 @@ class SideMenu extends Component {
 
   handleChangeSelect = (selectValue) => {
     const { appState, history } = this.props;
-    console.log(selectValue)
+    // console.log(selectValue)
     let parsed = this.state.dataParse;
     if (selectValue == null) {
       parsed.repo = []
@@ -135,7 +135,7 @@ class SideMenu extends Component {
     this.setState({ 
       langVal 
     })
-    console.log(arr)
+    // console.log(arr)
     parsed.lang = arr;
     const stringified = queryString.stringify(parsed);
     history.push(`/profiles/1?${stringified}`)
@@ -157,7 +157,6 @@ class SideMenu extends Component {
 
   render() {
     const { activeItem } = this.state
-    console.log(typeof this.state.search)
     const {appState} = this.props;
     return (
       <div className="ui vertical menu">

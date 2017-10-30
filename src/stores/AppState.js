@@ -61,7 +61,6 @@ class AppState {
     const repoqs = (repo.length != 0) ? `+repos:${repo}` : '';
     const langqs = (lang.length != 0) ? `+language:${lang}` : ''
     querystring = `${nameqs}${repoqs}${langqs}`;
-    console.log(name)
     if (filter.type !== '') {
       switch (filter.type) {
         // case 'name':

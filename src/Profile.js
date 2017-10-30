@@ -41,7 +41,6 @@ class Profile extends Component {
   render() {
     const { appState, match } = this.props;
     const tableList = appState.tableList;
-
     return (
       <div className="App">
         <Header/>
