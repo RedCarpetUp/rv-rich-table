@@ -15,7 +15,21 @@ class Profile extends Component {
     userDetail: {
       name: '',
       avatar: ''
-    }
+    },
+    offline: '',
+    initOfflineUI: false
+  }
+
+  componentDidMount(){
+    setInterval(() => {
+      if(window.navigator.onLine){
+        console.log('online');
+        this.setState({offline:false})
+      } else {
+        console.log('offline');
+        this.setState({offline:true, initOfflineUI:true})
+      }
+    },1000)
   }
 
   toggleOverlay = e => {
@@ -43,8 +57,19 @@ class Profile extends Component {
     const tableList = appState.tableList;
     return (
       <div className="App">
+        {this.state.offline &&
+        <div className="offline-ui offline-ui-down offline-ui-connecting offline-ui-reconnect-failed-2s offline-ui-reconnect-failed-5s">
+          <div className="offline-ui-content" data-retry-in-value="now" data-retry-in-unit=""></div>
+          <a href="" className="offline-ui-retry"></a>
+        </div>
+        }
+        {!this.state.offline && this.state.initOfflineUI &&
+        <div className="offline-ui offline-ui-up offline-ui-up-5s">
+          <div className="offline-ui-content" data-retry-in-value="now" data-retry-in-unit=""></div>
+          <a href="" className="offline-ui-retry"></a>
+        </div>
+        }
         <Header/>
-        
         <h2 className="ui header" style={{paddingLeft:'20px'}}>
           <i className="group icon"></i>
           <div className="content">
