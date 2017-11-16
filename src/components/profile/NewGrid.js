@@ -5,9 +5,11 @@ import { observer } from 'mobx-react';
 import Draggable from 'react-draggable';
 import ReactPaginate from 'react-paginate';
 import { Button, Header, Image, Modal, Form, 
-  Checkbox, Sidebar, Segment, Menu, Icon } from 'semantic-ui-react';
+  Checkbox, Sidebar, Segment, Menu, Icon, Message } from 'semantic-ui-react';
 import { parseClip, parseRow } from '../../utils/parsing';
 import queryString from 'query-string';
+import ToolTip from 'react-portal-tooltip'
+
 
 class TableApp extends Component {
 
@@ -21,6 +23,10 @@ class TableApp extends Component {
   }
 
   state = {
+    tooltip: 'none',
+    tooltipText: '',
+    offsetX: 0,
+    offsetY: 0,
     isClickable: true,
     isSortDown: '',
     mode: "cells",
@@ -299,6 +305,32 @@ class TableApp extends Component {
     })
   }
 
+  handleTooltip = (data, e) => {
+    const bodyRect = document.getElementById('table-cont').getBoundingClientRect()
+    const elemRect = e.target.getBoundingClientRect();
+    const offsetY   = elemRect.top - bodyRect.top;
+    const offsetX   = elemRect.left - bodyRect.left;
+    console.log(offsetX, offsetY)
+    this.setState({
+      tooltip: 'block',
+      offsetY: offsetY - 54,
+      offsetX: offsetX,
+      tooltipText: data
+    })
+  }
+
+  handleTooltip2 = e => {
+    this.setState({
+      tooltip: 'block'
+    })
+  }
+
+  handleTooltipOut = e => {
+    this.setState({
+      tooltip: 'none'
+    })
+  }
+
   cellRenderer(scrollToColumn, scrollToRow, { columnIndex, key, rowIndex, style}) {
     const { appState } = this.props;
     const { isClickable, mode, columns } = this.state;
@@ -332,9 +364,10 @@ class TableApp extends Component {
     } else {
       hgbg = '';
     }
-    
+    const show = (columnIndex === scrollToColumn && rowIndex === scrollToRow) ? true : false;
 
     return (
+      <div>
       <div key={key}>
           <div
             className={className}
@@ -363,13 +396,17 @@ class TableApp extends Component {
             }}
 
           >
+
+            
             {columnName == ' ' &&
               <div onClick={this.handleSelectClick.bind(this, rowIndex)} onCopy={this.handleCopy.bind(this, rowIndex)} className="cell-div22">
                 <span>{rowIndex + 1}</span>
               </div>
             }
             {columnName == 'Id' &&
-              <div onCopy={this.handleCopyCell.bind(this, rowIndex, columnIndex)} className={hgbg}>
+              <div onMouseEnter={this.handleTooltip.bind(this, tableList[rowIndex][this.state.columns[columnIndex]])}
+            onMouseLeave={this.handleTooltipOut} onCopy={this.handleCopyCell.bind(this, rowIndex, columnIndex)} className={hgbg}>
+
                 {!tableList[rowIndex]['dropdownRow'] && !tableList[rowIndex]['blankColumn'] && typeof tableList[rowIndex] === 'object' &&
                   <div style={{textAlign:'left'}}
                   className="cell-div2">
@@ -426,7 +463,9 @@ class TableApp extends Component {
               </div>
             }
             {columnName == 'Name' &&
-              <div className={'cell-div2 ' + hgbg} style={{paddingTop:'4px'}} onCopy={this.handleCopyCell.bind(this, rowIndex, columnIndex)}>
+              <div onMouseEnter={this.handleTooltip.bind(this, this.state[`cell-edit-${rowIndex}-${columnIndex}`] || tableList[rowIndex][this.state.columns[columnIndex]]) }
+
+            onMouseLeave={this.handleTooltipOut} className={'cell-div2 ' + hgbg} style={{paddingTop:'4px'}} onCopy={this.handleCopyCell.bind(this, rowIndex, columnIndex)}>
               {idRow &&
               <div id={`cell-edit-${rowIndex}-${columnIndex}`} className={isClick ? 'cell-wrap active-cell' : 'cell-wrap'}>
                 <input className="editing-cell" type="text" defaultValue={tableList[rowIndex][this.state.columns[columnIndex]]} 
@@ -449,7 +488,9 @@ class TableApp extends Component {
               </div>
             }
             {columnName == 'Followers' &&
-              <div className={'cell-div2 ' + hgbg} style={{paddingTop:'4px'}} onCopy={this.handleCopyCell.bind(this, rowIndex, columnIndex)}>
+              <div onMouseEnter={this.handleTooltip.bind(this, tableList[rowIndex][this.state.columns[columnIndex]]) }
+
+            onMouseLeave={this.handleTooltipOut} className={'cell-div2 ' + hgbg} style={{paddingTop:'4px'}} onCopy={this.handleCopyCell.bind(this, rowIndex, columnIndex)}>
               <span>{tableList[rowIndex][this.state.columns[columnIndex]]}</span>
               </div>
             }
@@ -510,6 +551,7 @@ class TableApp extends Component {
             }
       </div>
       </div>
+      </div>
     );
   }
 
@@ -561,7 +603,7 @@ class TableApp extends Component {
     const { isClickable, mode, scrollToColumn, scrollToRow, columns  } = this.state;
     const tableList = appState.tableList;
     return (
-      <div className="table-cont">
+      <div className="table-cont" id="table-cont">
         <ArrowKeyStepper
           columnCount={columns.length}
           key={isClickable}
@@ -623,6 +665,15 @@ class TableApp extends Component {
            subContainerClassName={"pages pagination"}
            activeClassName={"active"} />
         </div>
+        <Message className="tooltip" floating onMouseEnter={this.handleTooltip2} onMouseLeave={this.handleTooltipOut}
+          style={{
+            display: this.state.tooltip,
+            left: this.state.offsetX,
+            top: this.state.offsetY
+          }}
+        >
+          {this.state.tooltipText}
+        </Message>
       </div>
     );
   }

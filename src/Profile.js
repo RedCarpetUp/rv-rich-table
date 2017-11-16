@@ -23,10 +23,8 @@ class Profile extends Component {
   componentDidMount(){
     setInterval(() => {
       if(window.navigator.onLine){
-        console.log('online');
         this.setState({offline:false})
       } else {
-        console.log('offline');
         this.setState({offline:true, initOfflineUI:true})
       }
     },1000)

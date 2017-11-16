@@ -23,6 +23,17 @@ body {
       overflow: scroll;
     }
 }
+.table-cont{
+  position: relative;
+}
+.tooltip{
+  left: 0;
+  top: 0;
+  z-index: 9999;
+  background: #FFF;
+  border: 1px solid #CCC;
+  position: absolute !important;
+}
 .HeaderGrid{
   overflow: hidden !important;
 }
