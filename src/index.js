@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import Routes from './routes';
-import AppState from './stores/AppState'
+import store from './stores'
 import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter as Router } from "react-router-dom";
 import 'react-select/dist/react-select.css'
@@ -12,8 +12,8 @@ import { Provider } from "mobx-react";
 
 ReactDOM.render(
 	<Router>
-		<Provider>
-			<Routes appState={new AppState()} />
+		<Provider appState = {store.AppState}>
+			<Routes />
 		</Provider>
 	</Router>, 
 	document.getElementById('root')
