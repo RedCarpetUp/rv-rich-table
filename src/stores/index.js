@@ -1,5 +1,6 @@
 import AppState from "./AppState";
 
-export default {
-	appState: AppState
-};
+const store = {
+    AppState
+}
+export default store;
