@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import Header from './components/layout/Header';
 import SideMenu from './components/profile/SideMenu';
-import {observer,inject} from 'mobx-react';
-import TableApp from './components/profile/NewGrid';
+import {inject, observer} from 'mobx-react';
 import {Menu, Sidebar} from 'semantic-ui-react';
 import {toJS} from 'mobx';
 import history from './history';
 import GridComponent from "./components/profile/GridComponent";
+import {PROFILEDATA} from "./components/utils/constants";
+import {fetchGithubUserData} from './api_endpoints/githubUser';
 
 class Profile extends Component {
 
@@ -28,7 +29,15 @@ class Profile extends Component {
         //         this.setState({offline: true, initOfflineUI: true})
         //     }
         // }, 1000);
-
+        // fetch data from github api
+        fetchGithubUserData().then(response => {
+            const arr = response.data.items;
+            if (arr.length === 0) {
+                this.props.appState.tableList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+            } else {
+                this.props.appState.tableList = arr;
+            }
+        })
     }
 
     toggleOverlay = e => {
@@ -50,6 +59,9 @@ class Profile extends Component {
             }
         })
     }
+    handlePageClick = e => {
+        // call api to fetch the result and update the props
+    };
 
     render() {
         const {appState, match} = this.props;
@@ -83,17 +95,16 @@ class Profile extends Component {
                             <SideMenu history={history} appState={appState}/>
                         </div>
                         <div className="thirteen wide column table-react" style={{padding: '0'}}>
-                            {/*<TableApp history={history} match={match} appState={appState}*/}
-                                      {/*onShowDetailClick={this.handleShowDetail}/>*/}
-                                      <GridComponent
-                                          history={this.props.history}
-                                          columnWidths={[50, 140, 100, 150, 320, 170, 230]}
-                                          columns={["select", "id", "avatar_url", "login", "followers_url", "task", "action"]}
-                                          columnName={[" ", "Id", "Avatar", "Name", "Followers", "Task", "Action"]}
-                                          tableList={this.props.appState.tableList}
-
-                                          pageCount={1}
-                                      />
+                            <GridComponent
+                                history={this.props.history}
+                                columnWidths={PROFILEDATA.columnWidths}
+                                columns={PROFILEDATA.columns}
+                                columnName={PROFILEDATA.columnName}
+                                tableList={this.props.appState.tableList}
+                                handlePageClick={this.handlePageClick}
+                                pageCount={1}
+                                onShowDetailClick={this.handleShowDetail}
+                            />
                         </div>
                     </div>
                 </div>
