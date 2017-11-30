@@ -11,15 +11,6 @@ import queryString from 'query-string';
 
 class GridComponent extends Component {
 
-    constructor() {
-        super();
-        //this.cellRendererBody = this.cellRendererBody.bind(this);
-        this.cellRenderer = this.cellRenderer.bind(this);
-        this.getColumnWidth = this.getColumnWidth.bind(this);
-        this.onDrag = this.onDrag.bind(this);
-        this.forceTableUpdate = this.forceTableUpdate.bind(this);
-    }
-
     state = {
         tooltip: 'none',
         tooltipText: '',
@@ -236,23 +227,23 @@ class GridComponent extends Component {
                     }
 
                 </div>
-                {/*<Draggable*/}
-                    {/*axis="x"*/}
-                    {/*onDrag={this.onDrag.bind(this, columnIndex)}*/}
-                    {/*position={{x: 0, y: 0}}*/}
-                {/*>*/}
-                    {/*<div*/}
-                        {/*className="column-sizer"*/}
-                        {/*style={{*/}
-                            {/*float: 'right',*/}
-                            {/*backgroundColor: 'transparent',*/}
-                            {/*//borderTop: '1px solid rgb(224, 224, 224)',*/}
-                            {/*borderRight: `1px solid rgb(224, 224, 224)`,*/}
-                            {/*borderBottom: `1px solid rgb(224, 224, 224)`,*/}
-                        {/*}}*/}
-                    {/*>*/}
-                    {/*</div>*/}
-                {/*</Draggable>*/}
+                <Draggable
+                    axis="x"
+                    onDrag={this.onDrag.bind(this, columnIndex)}
+                    position={{x: 0, y: 0}}
+                >
+                    <div
+                        className="column-sizer"
+                        style={{
+                            float: 'right',
+                            backgroundColor: 'transparent',
+                            //borderTop: '1px solid rgb(224, 224, 224)',
+                            borderRight: `1px solid rgb(224, 224, 224)`,
+                            borderBottom: `1px solid rgb(224, 224, 224)`,
+                        }}
+                    >
+                    </div>
+                </Draggable>
             </div>
         )
     }
@@ -585,24 +576,6 @@ class GridComponent extends Component {
     }
 
     handlePageClick = e => {
-        const { history} = this.props;
-        const page = (isNaN(e.selected)) ? 0 : e.selected;
-        const qs = window.location.search;
-        const parsed = queryString.parse(qs);
-        if (this.state.sortBy == '') {
-            // if (match.params.sort == 'followers') {
-            //     history.push(`/profiles/${page + 1}/${match.params.sort}/${match.params.order}${qs}`)
-            //     this.props.getTableList({page: page + 1, type: 'sort', orderVal: match.params.order, qs: parsed});
-            // } else {
-                history.push(`/profiles/${page + 1}${qs}`)
-                // this.props.getTableList({page: page + 1, qs: parsed});
-            // }
-        } else {
-            history.push(`/profiles/${page + 1}/${this.state.sortBy}/${this.state.order}${qs}`)
-            // this.props.getTableList({page: page + 1, type: 'sort', orderVal: this.state.order, qs: parsed});
-        }
-        this.setState({page: page + 1})
-
     }
 
 
@@ -662,30 +635,31 @@ class GridComponent extends Component {
                         </div>
                     }
                 </ArrowKeyStepper>
-                {/*<div id="react-paginate">*/}
-                    {/*<ReactPaginate previousLabel={"<"}*/}
-                                   {/*nextLabel={">"}*/}
-                                   {/*breakLabel={<a href="">...</a>}*/}
-                                   {/*breakClassName={"break-me"}*/}
-                                   {/*pageCount={this.props.pageCount}*/}
-                                   {/*marginPagesDisplayed={2}*/}
-                                   {/*pageRangeDisplayed={30}*/}
-                                   {/*initialPage={parseInt(1) - 1}*/}
-                                   {/*onPageChange={this.handlePageClick}*/}
-                                   {/*containerClassName={"pagination"}*/}
-                                   {/*subContainerClassName={"pages pagination"}*/}
-                                   {/*activeClassName={"active"}/>*/}
-                {/*</div>*/}
-                {/*<Message className="tooltip" floating onMouseEnter={this.handleTooltip2}*/}
-                         {/*onMouseLeave={this.handleTooltipOut}*/}
-                         {/*style={{*/}
-                             {/*display: this.state.tooltip,*/}
-                             {/*left: this.state.offsetX,*/}
-                             {/*top: this.state.offsetY*/}
-                         {/*}}*/}
-                {/*>*/}
-                    {/*{this.state.tooltipText}*/}
-                {/*</Message>*/}
+                <div id="react-paginate">
+                    <ReactPaginate previousLabel={"<"}
+                                   nextLabel={">"}
+                                   breakLabel={<a href="">...</a>}
+                                   breakClassName={"break-me"}
+                                   pageCount={this.props.pageCount}
+                                   marginPagesDisplayed={2}
+                                   pageRangeDisplayed={30}
+                                   initialPage={parseInt(1) - 1}
+                                   onPageChange={this.props.handlePageClick}
+                                   containerClassName={"pagination"}
+                                   subContainerClassName={"pages pagination"}
+                                   activeClassName={"active"}
+                                   disableInitialCallback/>
+                </div>
+                <Message className="tooltip" floating onMouseEnter={this.handleTooltip2}
+                         onMouseLeave={this.handleTooltipOut}
+                         style={{
+                             display: this.state.tooltip,
+                             left: this.state.offsetX,
+                             top: this.state.offsetY
+                         }}
+                >
+                    {this.state.tooltipText}
+                </Message>
             </div>
         );
     }
