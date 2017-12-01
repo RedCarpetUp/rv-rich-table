@@ -22,14 +22,6 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        // setInterval(() => {
-        //     if (window.navigator.onLine) {
-        //         this.setState({offline: false})
-        //     } else {
-        //         this.setState({offline: true, initOfflineUI: true})
-        //     }
-        // }, 1000);
-        // fetch data from github api
         fetchGithubUserData().then(response => {
             const arr = response.data.items;
             if (arr.length === 0) {
@@ -63,6 +55,20 @@ class Profile extends Component {
         // call api to fetch the result and update the props
     };
 
+    componentWillReceiveProps(nextProps) {
+        const queryParams = nextProps.location.search;
+        if (nextProps.location.search !== this.props.location.search && queryParams.length !== 0) {
+            fetchGithubUserData(queryParams.replace('?name=', '')).then(response => {
+                const arr = response.data.items;
+                if (arr.length === 0) {
+                    this.props.appState.tableList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+                } else {
+                    this.props.appState.tableList = arr;
+                }
+            })
+        }
+    }
+
     render() {
         const {appState, match} = this.props;
         // const tableList = appState.tableList;
@@ -92,11 +98,11 @@ class Profile extends Component {
                 <div className="ui celled two column stackable grid">
                     <div className="row" style={{height: '500px'}}>
                         <div className="three wide column">
-                            <SideMenu history={history} appState={appState}/>
+                            <SideMenu location={this.props.location} history={history} appState={this.props.appState}/>
                         </div>
                         <div className="thirteen wide column table-react" style={{padding: '0'}}>
                             <GridComponent
-                                history={this.props.history}
+                                history={history}
                                 columnWidths={PROFILEDATA.columnWidths}
                                 columns={PROFILEDATA.columns}
                                 columnName={PROFILEDATA.columnName}
