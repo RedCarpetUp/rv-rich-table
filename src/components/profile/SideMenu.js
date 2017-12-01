@@ -90,8 +90,8 @@ class SideMenu extends Component {
             this.setState({
                 dataParse: parsed
             })
-            appState.getTableList({qs: parsed});
-            history.push(`/profiles/1?${stringified}`)
+            // appState.getTableList({qs: parsed});
+            history.push(`?${stringified}`)
         }
     }
 
